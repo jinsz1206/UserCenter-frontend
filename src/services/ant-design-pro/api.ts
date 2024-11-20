@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取当前的用户 GET /api/currentUser */
+/** 获取当前的用户 GET /api/user/current */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<API.CurrentUser>('/api/user/current', {
     method: 'GET',
@@ -18,7 +18,7 @@ export async function outLogin(options?: { [key: string]: any }) {
   });
 }
 
-/** 登录接口 POST /api/login/account */
+/** 登录接口 POST /api/user/login */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
   return request<API.LoginResult>('/api/user/login', {
     method: 'POST',
@@ -41,6 +41,15 @@ export async function register(body: API.RegisterParams, options?: { [key: strin
     ...(options || {}),
   });
 }
+
+/** 此处后端没有提供注释 GET /api/user/search */
+export async function SearchUsers(options?: { [key: string]: any }) {
+  return request<API.CurrentUser[]>('/api/user/search', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 
 /** 此处后端没有提供注释 GET /api/notices */
 export async function getNotices(options?: { [key: string]: any }) {

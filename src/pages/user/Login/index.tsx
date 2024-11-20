@@ -144,8 +144,7 @@ const Login: React.FC = () => {
             <ProFormCheckbox noStyle name="autoLogin">
               自动登录
             </ProFormCheckbox>
-
-            <Link to = "/usr/register">注册账户</Link>
+            <Link to = "/user/register">注册账户</Link>
             <a
               style={{
                 float: 'right',

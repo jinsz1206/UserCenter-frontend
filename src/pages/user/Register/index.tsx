@@ -4,7 +4,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { message, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { history } from 'umi';
+import {history, Link} from 'umi';
 import styles from './index.less';
 import { SYSTEM_LOGO } from '../../../../constants';
 
@@ -130,9 +130,21 @@ const Register: React.FC = () => {
               />
             </>
           )}
+
+          <div
+            style={{
+              display: 'flex',
+              marginBottom: 24,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            已有账户?
+            <Link to="/user/login">立即登录</Link>
+          </div>
         </LoginForm>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };

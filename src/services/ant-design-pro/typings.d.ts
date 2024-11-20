@@ -4,13 +4,11 @@
 declare namespace API {
   type CurrentUser = {
     id:number;
-    username:String;
+    userName:String;
     userAccount:String;
-    avatarUrl?:String;
-    gender:String;
-    phone?:String;
-    email?:String;
-    userStatus:String;
+    userAvatar?:String;
+    userGender:String;
+    userProfile:String;
     userRole:String;
     createTime:Date;
   };
