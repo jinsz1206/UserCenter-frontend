@@ -11,7 +11,7 @@ import {
 } from '@ant-design/pro-components';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, Link, useModel } from 'umi';
 import styles from './index.less';
 import {JSZ_REPOSITORY, SYSTEM_LOGO} from "../../../../constants";
 const LoginMessage: React.FC<{
@@ -42,11 +42,11 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({
+      const user = await login({
         ...values,
         type,
       });
-      if (msg.status === 'ok') {
+      if (user) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
@@ -59,9 +59,7 @@ const Login: React.FC = () => {
         history.push(redirect || '/');
         return;
       }
-      console.log(msg);
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
+      setUserLoginState(user);
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       message.error(defaultLoginFailureMessage);
@@ -92,7 +90,7 @@ const Login: React.FC = () => {
           {type === 'account' && (
             <>
               <ProFormText
-                name="username"
+                name="userAccount"
                 fieldProps={{
                   size: 'large',
                   prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -103,10 +101,16 @@ const Login: React.FC = () => {
                     required: true,
                     message: '用户名是必填项！',
                   },
+                  {
+                    min: 6,
+                    max: 12,
+                    type: 'string',
+                    message:'账号长度为6-12位'
+                  },
                 ]}
               />
               <ProFormText.Password
-                name="password"
+                name="userPassword"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined className={styles.prefixIcon} />,
@@ -117,6 +121,12 @@ const Login: React.FC = () => {
                     required: true,
                     message: '密码是必填项！',
                   },
+                  {
+                    min: 6,
+                    max: 15,
+                    type: 'string',
+                    message:'密码长度为6-15位'
+                  },
                 ]}
               />
             </>
@@ -125,12 +135,17 @@ const Login: React.FC = () => {
           {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           <div
             style={{
+              display: 'flex',
               marginBottom: 24,
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
               自动登录
             </ProFormCheckbox>
+
+            <Link to = "/usr/register">注册账户</Link>
             <a
               style={{
                 float: 'right',

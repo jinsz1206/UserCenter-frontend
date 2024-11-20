@@ -1,23 +1,25 @@
-import Footer from '@/components/Footer';
+import type {Settings as LayoutSettings} from '@ant-design/pro-layout';
+import {PageLoading, SettingDrawer} from '@ant-design/pro-layout';
+import type {RunTimeLayoutConfig} from 'umi';
+import {history, Link} from 'umi';
 import RightContent from '@/components/RightContent';
-import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from 'umi';
-import { history, Link } from 'umi';
+import Footer from '@/components/Footer';
+import {currentUser as queryCurrentUser} from './services/ant-design-pro/api';
+import {BookOutlined, LinkOutlined} from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import {RequestConfig} from "@@/plugin-request/request";
+
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const WHITE_LIST = ['/user/register',loginPath]
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
 export const request: RequestConfig = {
-  timeout: 10000,
+  timeout: 100000,
 
 };
 
@@ -32,24 +34,24 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser();
-      return msg.data;
+      const user = await queryCurrentUser();
+      return user;
     } catch (error) {
-      history.push(loginPath);
+       // history.push(loginPath);
     }
     return undefined;
   };
   // 如果不是登录页面，执行
-  if (history.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
+  if (WHITE_LIST.includes(history.location.pathname)) {
     return {
       fetchUserInfo,
-      currentUser,
       settings: defaultSettings,
     };
   }
+  const currentUser = await fetchUserInfo();
   return {
     fetchUserInfo,
+    currentUser,
     settings: defaultSettings,
   };
 }
@@ -61,13 +63,17 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.username,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
+
+      if (WHITE_LIST.includes(location.pathname)){
+        return;
+      }
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser) {
         history.push(loginPath);
       }
     },
