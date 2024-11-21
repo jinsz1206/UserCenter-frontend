@@ -18,6 +18,15 @@ declare namespace API {
     type?: string;
     currentAuthority?: string;
   };
+  /**
+   * 返回通用类
+   */
+  type BaseResponse<T> = {
+    code:number;
+    data?: T;
+    message?: string;
+    description?: string;
+  }
 
   type PageParams = {
     current?: number;

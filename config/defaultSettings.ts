@@ -1,23 +1,20 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-components';
+import { SYSTEM_LOGO } from '../constants';
 
-const Settings: LayoutSettings & {
+const settings: LayoutSettings & {
   pwa?: boolean;
   logo?: string;
 } = {
+  // 修改左上角的 logo
+  logo: SYSTEM_LOGO,
+  // 设置标题的 title
+  title: 'Ant Design Pro',
   navTheme: 'light',
   // 拂晓蓝
   primaryColor: '#1890ff',
   layout: 'mix',
   contentWidth: 'Fluid',
-  fixedHeader: false,
   fixSiderbar: true,
-  colorWeak: false,
-  //todo  修改标题logo和浏览器头
-  title: 'Ant Design Pro',
-  pwa: false,
-
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
-  iconfontUrl: '',
 };
 
-export default Settings;
+export default settings;
